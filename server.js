@@ -1713,7 +1713,7 @@ app.post('/cut-video', function(req, res) {
     const videoPathFromUrl = new URL(data.videoUrl).pathname.replace('/videos', '');
 
     // Combina la ruta extraída con la ruta base donde se almacenan tus videos
-    const filePath = path.join('E:/GrabacionesTv', videoPathFromUrl);
+    const filePath = path.join('//172.23.139.32/GrabacionesTv', videoPathFromUrl);
     console.log("Full path to input video:", filePath);
 
     const directory = path.dirname(filePath);
@@ -1741,7 +1741,7 @@ app.post('/cut-video', function(req, res) {
         .on('end', function(err) {
             if (!err) {
                 console.log('Video conversion has been done successfully');
-                res.json({ fragmentPath: outputFile.replace("E:\\GrabacionesTv", "") });
+                res.json({ fragmentPath: outputFile.replace("//172.23.139.32/GrabacionesTv", "") });
             }
         })
         .on('error', function(err) {
@@ -1763,7 +1763,7 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    const audioPath = path.join('G:/CapitalPress/GrabacionesRadio', req.params[0]);
+    const audioPath = path.join('//172.23.139.32/CapitalPress/GrabacionesRadio', req.params[0]);
     console.log("Trying to serve audio from:", audioPath);
 
     const stat = fs.statSync(audioPath);
@@ -1803,7 +1803,7 @@ app.get('/list-audio', async (req, res) => {
     console.log("Accessing directory:", directory);
 
     try {
-        let content = await listContent('G:/CapitalPress/GrabacionesRadio', directory);
+        let content = await listContent('//172.23.139.32/CapitalPress/GrabacionesRadio', directory);
         console.log("Content:", content);
         res.json(content);
     } catch (error) {
