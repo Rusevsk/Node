@@ -1502,7 +1502,7 @@ app.post('/cut-audio', function(req, res) {
     const emisoraName = directory.split(path.sep).slice(-3, -2)[0]; // Tomamos el nombre de la emisora de la ruta
 
     // Definimos la carpeta central de Fragmentos y luego la subcarpeta de la emisora
-    const centralFragmentDirectory = 'G:\\CapitalPress\\Fragmentos';
+    const centralFragmentDirectory = '/mnt/CapitalPress/Fragmentos';
     const emisoraFragmentDirectory = path.join(centralFragmentDirectory, emisoraName);
 
     // Si la subcarpeta de la emisora no existe, la creamos
