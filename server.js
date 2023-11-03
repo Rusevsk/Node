@@ -1543,25 +1543,32 @@ app.post('/cut-audio', function(req, res) {
 
 async function listContent(baseDirectory, directory = '') {
     const fullPathDirectory = path.join(baseDirectory, directory);
-    console.log('Accessing directory:', fullPathDirectory);
+    console.log('Full path:', fullPathDirectory);
     try {
-        const files = await fsPromises.readdir(fullPathDirectory, { withFileTypes: true });
-        const contentList = files.map(file => {
-            const relativePath = path.join(directory, file.name);
-            if (file.isDirectory()) {
-                return { type: 'directory', name: file.name, path: `/${relativePath}` };
-            } else if (['.mp4', '.mp3'].includes(path.extname(file.name))) {
-                return { type: 'file', name: file.name, path: `/${relativePath}` };
+        let files = await fsPromises.readdir(fullPathDirectory);
+        console.log('Files:', files);
+        let contentList = [];
+
+        for (let file of files) {
+            let fullPath = path.join(fullPathDirectory, file);
+            let stat = await fsPromises.stat(fullPath);
+            let relativePath = path.relative(baseDirectory, fullPath);
+
+            if (stat.isDirectory()) {
+                // Añade '/' al principio para que sea una ruta absoluta en el contexto de tu servidor
+                contentList.push({ type: 'directory', name: file, path: '/' + relativePath.replace(/\\/g, '/') });
+            } else if (stat.isFile() && ['.mp3', '.mp4'].includes(path.extname(file).toLowerCase())) {
+                // Añade '/' al principio y asegúrate de usar barras '/' para rutas web
+                contentList.push({ type: 'file', name: file, path: '/' + path.join(relativePath, file).replace(/\\/g, '/') });
             }
-        }).filter(Boolean); // Elimina los elementos indefinidos o nulos
+        }
+
         return contentList;
     } catch (error) {
-        console.error('Error accessing directory:', fullPathDirectory, error);
-        throw error;
+        console.error('Error accessing path:', fullPathDirectory, error);
+        throw error; // Re-throw the error to be handled by the caller
     }
 }
-
-
 
 app.get('/list-years', async (req, res) => {
     console.log('Received request for list-years endpoint');
