@@ -1765,8 +1765,7 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 app.get('/radio/*', (req, res) => {
     const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', req.params[0]);
     console.log("Trying to serve audio from:", audioPath);
-
-
+    
     const stat = fs.statSync(audioPath);
     const fileSize = stat.size;
     const range = req.headers.range;
