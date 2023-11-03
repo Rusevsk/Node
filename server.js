@@ -1494,7 +1494,7 @@ app.post('/cut-audio', function(req, res) {
         data.audioUrl = data.audioUrl.replace("/audio", "");
     }
 
-    const filePath = path.join('G:/CapitalPress/GrabacionesRadio', data.audioUrl);
+    const filePath = path.join('/mnt/CapitalPress/GrabacionesRadio', data.audioUrl);
     console.log("Full path to input file:", filePath);
 
     // Extract the directory and emisora name from the file path
