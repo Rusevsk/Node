@@ -1558,8 +1558,8 @@ async function listContent(baseDirectory, directory = '') {
                 // Añade '/' al principio para que sea una ruta absoluta en el contexto de tu servidor
                 contentList.push({ type: 'directory', name: file, path: '/' + relativePath.replace(/\\/g, '/') });
             } else if (stat.isFile() && ['.mp3', '.mp4'].includes(path.extname(file).toLowerCase())) {
-                // Añade '/' al principio y asegúrate de usar barras '/' para rutas web
-                contentList.push({ type: 'file', name: file, path: '/' + path.join(relativePath, file).replace(/\\/g, '/') });
+                // Añade '/' al principio y asegúrate de usar barras '/' para rutas web, pero no dupliques el nombre del archivo
+                contentList.push({ type: 'file', name: file, path: '/' + relativePath.replace(/\\/g, '/') });
             }
         }
 
