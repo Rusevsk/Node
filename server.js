@@ -1543,32 +1543,24 @@ app.post('/cut-audio', function(req, res) {
 
 async function listContent(baseDirectory, directory = '') {
     const fullPathDirectory = path.join(baseDirectory, directory);
-    console.log('Full path:', fullPathDirectory);
+    console.log('Accessing directory:', fullPathDirectory);
     try {
-        let files = await fsPromises.readdir(fullPathDirectory);
-        console.log('Files:', files);
-        let contentList = [];
-
-        for (let file of files) {
-            let fullPath = path.join(fullPathDirectory, file);
-            let stat = await fsPromises.stat(fullPath);
-            let relativePath = path.relative(baseDirectory, fullPath);
-
-            if (stat.isDirectory()) {
-                // Asegúrate de que la ruta relativa comience con '/' para que sea una ruta absoluta en el contexto de tu servidor
-                contentList.push({ type: 'directory', name: file, path: '/' + relativePath });
-            } else if (['.mp4', '.mp3'].includes(path.extname(file))) {
-                // Asegúrate de que la ruta relativa comience con '/' para que sea una ruta absoluta en el contexto de tu servidor
-                contentList.push({ type: 'file', name: file, path: '/' + relativePath });
+        const files = await fsPromises.readdir(fullPathDirectory, { withFileTypes: true });
+        const contentList = files.map(file => {
+            const relativePath = path.join(directory, file.name);
+            if (file.isDirectory()) {
+                return { type: 'directory', name: file.name, path: `/${relativePath}` };
+            } else if (['.mp4', '.mp3'].includes(path.extname(file.name))) {
+                return { type: 'file', name: file.name, path: `/${relativePath}` };
             }
-        }
-
+        }).filter(Boolean); // Elimina los elementos indefinidos o nulos
         return contentList;
     } catch (error) {
-        console.error('Error accessing path:', fullPathDirectory, error);
-        throw error; // Re-throw the error to be handled by the caller
+        console.error('Error accessing directory:', fullPathDirectory, error);
+        throw error;
     }
 }
+
 
 
 app.get('/list-years', async (req, res) => {
@@ -1768,12 +1760,9 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/radio/*', (req, res) => {
+app.get('/radio/*', async (req, res) => {
     const filePath = req.params[0];
-    console.log("Received file path:", filePath);  // Imprime el camino recibido para verificarlo
-
     const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
-    console.log("Constructed audio path:", audioPath);  // Verifica la ruta construida
     console.log("Trying to serve audio from:", audioPath);
     
     try {
