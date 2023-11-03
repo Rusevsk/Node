@@ -1768,28 +1768,27 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    // Extrae la ruta de los parámetros de la solicitud
     const filePath = req.params[0];
-
-    // Asegúrate de que filePath no tenga una barra inicial para que path.join construya la ruta correctamente
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath.startsWith('/') ? filePath.substring(1) : filePath);
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
     console.log("Constructed audio path:", audioPath);
 
+    // Verificar si el archivo existe
+    fs.stat(audioPath, (err, stat) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                // El archivo no existe
+                console.error("File does not exist:", audioPath);
+                return res.status(404).send('Audio file not found');
+            }
+            // Error de servidor
+            console.error("Error serving audio file:", err);
+            return res.status(500).send('Internal Server Error');
+        }
 
-    // Verificar si el archivo existe antes de intentar servirlo
-    if (!fs.existsSync(audioPath)) {
-        console.error("File does not exist:", audioPath);
-        res.status(404).send('Audio file not found');
-        return;
-    }
-    
-    try {
-        const stat = fs.statSync(audioPath);
         const fileSize = stat.size;
         const range = req.headers.range;
 
         if (range) {
-            // Manejo de solicitudes con rango para streaming parcial
             const parts = range.replace(/bytes=/, "").split("-");
             const start = parseInt(parts[0], 10);
             const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
@@ -1799,24 +1798,20 @@ app.get('/radio/*', (req, res) => {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
                 'Content-Length': chunksize,
-                'Content-Type': 'audio/mpeg', // Asumiendo que tus archivos son MP3
+                'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
             };
 
             res.writeHead(206, head);
             file.pipe(res);
         } else {
-            // Manejo de solicitudes sin rango para streaming completo
             const head = {
                 'Content-Length': fileSize,
-                'Content-Type': 'audio/mpeg', // Asumiendo que tus archivos son MP3
+                'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
             };
             res.writeHead(200, head);
             fs.createReadStream(audioPath).pipe(res);
         }
-    } catch (error) {
-        console.error("Error serving audio file:", error);
-        res.status(500).send('Internal Server Error');
-    }
+    });
 });
 
 
