@@ -1769,37 +1769,47 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', req.params[0]);
+    // Esto captura todos los segmentos de la ruta como un string
+    const filePath = req.params[0];
+    // Construye la ruta completa desde la ruta proporcionada
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
+
     console.log("Trying to serve audio from:", audioPath);
     
-    const stat = fs.statSync(audioPath);
-    const fileSize = stat.size;
-    const range = req.headers.range;
+    try {
+        const stat = fs.statSync(audioPath);
+        const fileSize = stat.size;
+        const range = req.headers.range;
 
-    if (range) {
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-        const chunksize = (end - start) + 1;
-        const file = fs.createReadStream(audioPath, { start, end });
-        const head = {
-            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunksize,
-            'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
-        };
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+            const chunksize = (end - start) + 1;
+            const file = fs.createReadStream(audioPath, { start, end });
+            const head = {
+                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunksize,
+                'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
+            };
 
-        res.writeHead(206, head);
-        file.pipe(res);
-    } else {
-        const head = {
-            'Content-Length': fileSize,
-            'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
-        };
-        res.writeHead(200, head);
-        fs.createReadStream(audioPath).pipe(res);
+            res.writeHead(206, head);
+            file.pipe(res);
+        } else {
+            const head = {
+                'Content-Length': fileSize,
+                'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
+            };
+            res.writeHead(200, head);
+            fs.createReadStream(audioPath).pipe(res);
+        }
+    } catch (error) {
+        console.error("Error serving audio file:", error);
+        res.status(404).send('Audio file not found');
     }
 });
+
 
 //------------------------------------- audio
 
