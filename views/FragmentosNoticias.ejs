@@ -1,0 +1,44 @@
+<%- include('partials/header', { title: 'Fragmentos de Noticias', user: user }) %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Fragmentos de Noticias</h1>
+    <a href="/fragmentosnoticias/add" class="btn btn-success mb-3">
+    Agregar Fragmento
+    </a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Noticia ID</th>
+                <th>Franja ID</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Texto Seleccionado</th>
+                <th>Fecha de Medio</th>
+                <th>Fecha de Subida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% fragmentos.forEach(fragmento => { %>
+            <tr>
+                <td><%= fragmento.id %></td>
+                <td><%= fragmento.noticia_id %></td>
+                <td><%= fragmento.franja_id %></td>
+                <td><%= moment.utc(fragmento.start_time).locale('es').format('HH:mm:ss') %></td>
+                <td><%= moment.utc(fragmento.end_time).locale('es').format('HH:mm:ss') %></td>
+                <td><%= fragmento.descripcion %></td>
+                <td><%= moment.utc(fragmento.fecha_medio).locale('es').format('YYYY-MM-DD') %></td>
+                <td><%= moment.utc(fragmento.fecha_subida).locale('es').format('YYYY-MM-DD HH:mm:ss') %></td>
+                <td>
+                    <a href="/fragmentosnoticias/edit/<%= fragmento.id %>" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="/fragmentosnoticias/delete/<%= fragmento.id %>" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este fragmento?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<%- include('partials/footer') %>

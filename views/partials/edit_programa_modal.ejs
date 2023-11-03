@@ -1,0 +1,32 @@
+<!-- Modal para editar un programa de radio -->
+<div class="modal fade" id="editProgramModal" tabindex="-1" aria-labelledby="editProgramModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProgramModalLabel">Editar Programa de Radio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/programasradio/edit" method="post" id="editProgramForm">
+                <input type="hidden" id="editProgramId" name="id"> <!-- Campo oculto para almacenar el ID -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editNombrePrograma" class="form-label">Nombre del Programa</label>
+                        <input type="text" class="form-control" id="editNombrePrograma" name="nombre_programa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="editDescripcion" name="descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDuracion" class="form-label">Duración (en minutos)</label>
+                        <input type="number" class="form-control" id="editDuracion" name="duracion" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

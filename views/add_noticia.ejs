@@ -1,0 +1,34 @@
+<%- include('partials/header', { title: 'Agregar Noticia Online', user: user }) %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Agregar Noticia Online</h1>
+    <form action="/noticiasonline/add" method="post">
+        <div class="mb-3">
+            <label for="medio_id" class="form-label">Medio</label>
+            <select name="medio_id" id="medio_id" class="form-control">
+                <% mediosOnline.forEach(medio => { %>
+                    <option value="<%= medio.id %>"><%= medio.nombre %></option>
+                <% }); %>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="link" class="form-label">Link</label>
+            <input type="url" class="form-control" id="link" name="link" required>
+        </div>
+        <div class="mb-3">
+            <label for="fecha_medio" class="form-label">Fecha Medio</label>
+            <input type="date" class="form-control" id="fecha_medio" name="fecha_medio" required>
+        </div>
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="mb-3">
+            <label for="texto" class="form-label">Contenido</label>
+            <textarea class="form-control" id="texto" name="texto" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Noticia</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>

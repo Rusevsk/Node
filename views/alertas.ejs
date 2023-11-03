@@ -1,0 +1,59 @@
+<%- include('partials/header', { title: 'Alertas', user: user }) %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Alertas</h1>
+    <form action="/alertas" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="Buscar alerta">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+    </form>
+
+    <div id="alertasContainer">
+        <% alertas.forEach(alerta => { %>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="card-title"><a href="/noticia/<%= alerta.id_noticia %>">Alerta para la Noticia <%= alerta.id_noticia %></a></h2>
+                <h3 class="card-subtitle mb-2 text-muted">Medio: <%= alerta.medio_nombre %></h3>
+                <h6 class="card-subtitle mb-2 text-muted">Keyword: <%= alerta.keyword %></h6>
+                <p class="card-text">Fecha: <%= moment.utc(alerta.fecha).locale('es').format('dddd - YYYY-MM-DD HH:mm:ss') %></p>
+                <% if(alerta.audio_path) { %> <!-- Asegúrate de que estás pasando audio_path en tu objeto de alerta -->
+                    <p>Audio:</p>
+                    <audio controls>
+                        <source src="<%= alerta.audio_path %>" type="audio/mpeg">
+                        Tu navegador no soporta la reproducción de audio.
+                    </audio>
+                <% } %>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination-container">
+        <div class="d-flex justify-content-center mb-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <% if (currentPage > 1) { %>
+                        <li class="page-item"><a class="page-link" href="/alertas?page=<%= currentPage - 1 %>&keyword=<%= keyword %>">Anterior</a></li>
+                    <% } %>
+
+                    <% const startPage = Math.max(1, currentPage - 1);
+                       const endPage = Math.min(startPage + 2, totalPages);
+
+                       for (let i = startPage; i <= endPage; i++) { %>
+                        <li class="page-item <% if (currentPage == i) { %>active<% } %>">
+                            <a class="page-link" href="/alertas?page=<%= i %>&keyword=<%= keyword %>"><%= i %></a>
+                        </li>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <li class="page-item"><a class="page-link" href="/alertas?page=<%= Number(currentPage) + 1 %>&keyword=<%= keyword %>">Siguiente</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+<%- include('partials/footer') %>

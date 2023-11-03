@@ -1,0 +1,22 @@
+<%- include('partials/header', { title: 'Clientes', user: user }) %>
+<div class="col-12 col-lg-10 main-content">
+    <h1>Selecciona un Cliente</h1>
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addClientModal">
+        Agregar Cliente
+    </button>
+    <div id="clientesContainer" style="max-height: 400px; overflow-y: scroll; padding: 15px; border: 1px solid #ccc;">
+        <ul class="list-group">
+            <% clientes.forEach(cliente => { %>
+                <li class="list-group-item">
+                    <a href="/palabras-claves/<%= cliente.id %>"><%= cliente.nombre %></a>
+                    <div>
+                    <a href="/clientes/configuracion/<%= cliente.id %>" class="btn btn-info btn-sm">Configuración</a>
+                    <a href="/clientes/eliminar/<%= cliente.id %>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este cliente?');">Eliminar</a>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</div>
+<%- include('partials/add_client_modal') %>
+<%- include('partials/footer') %>

@@ -1,0 +1,36 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bootstrap": "^3.4.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "esm": "^3.2.25",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "jquery": "^3.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
+    "mssql": "^9.1.1",
+    "mysql": "^2.18.1",
+    "qrcode-terminal": "^0.12.0",
+    "tempy": "^3.1.0",
+    "video.js": "^8.6.0",
+    "videojs-playbackrate-adjuster": "^1.0.1",
+    "whatsapp-web.js": "^1.22.1"
+  }
+}

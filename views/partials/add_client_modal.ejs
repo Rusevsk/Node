@@ -1,0 +1,19 @@
+<div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addClientModalLabel">Agregar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/clientes/agregar" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

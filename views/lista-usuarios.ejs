@@ -1,0 +1,37 @@
+<%- include('partials/header', { title: 'Lista de Usuarios', user: user }) %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Lista de Usuarios</h1>
+    <!-- Botón para crear usuarios -->
+    <div class="mb-3">
+        <a href="/crear-usuario" class="btn btn-primary">Crear Usuario</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre de usuario</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.ID %></td>
+                    <td><%= user.Username %></td>
+                    <td><%= user.roleName %></td>
+                    <td>
+                        <a href="/editar-usuario/<%= user.ID %>">Editar</a>
+                        <a href="/eliminar-usuario/<%= user.ID %>">Eliminar</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+</div> <!-- Fin de la fila -->
+</div> <!-- Fin del contenedor -->
+
+<%- include('partials/footer') %>

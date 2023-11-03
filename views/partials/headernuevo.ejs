@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <title>Sidebar With Bootstrap</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="h-100">
+                <div class="sidebar-logo">
+                    <a href="#"><img src="<%= user.Logos %>" alt="Logo del usuario" class="user-logo"></a>
+                </div>
+                <!-- Sidebar Navigation -->
+                <ul class="sidebar-nav">
+
+                    <li class="sidebar-item">
+                        <a href="/" class="sidebar-link">
+                            <i class="bi bi-house pe-2"></i>
+                            Inicio
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/radio" class="sidebar-link">
+                            <i class="bi bi-music-player pe-2"></i>
+                            Radio
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/radio" class="sidebar-link">
+                            <i class="bi bi-tv pe-2"></i>
+                            Television
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/radio" class="sidebar-link">
+                            <i class="bi bi-link-45deg pe-2"></i>
+                            Online
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/radio" class="sidebar-link">
+                            <i class="bi bi-newspaper pe-2"></i>
+                            Prensa
+                        </a>
+                    </li>
+                    <% if (user.role_id === 2 || user.role_id === 3) { %>
+                    <li class="sidebar-item">
+                        <a href="/alertas" class="sidebar-link">
+                            <i class="bi bi-bell pe-2"></i>
+                            Ver Alertas
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/FragmentosNoticias" class="sidebar-link">
+                            <i class="bi bi-bell pe-2"></i>
+                            Fragmentos
+                        </a>
+                    </li>
+                    <!-- Configuration Dropdown -->
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#configOptions"
+                            aria-expanded="false" aria-controls="configOptions">
+                            <i class="bi bi-gear pe-2"></i>
+                            Configuración
+                        </a>
+                        <ul id="configOptions" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="/lista-usuarios" class="sidebar-link">
+                                    <i class="bi bi-people-fill pe-2"></i>
+                                    Usuarios
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/clientes" class="sidebar-link">
+                                    <i class="bi bi-person-workspace pe-2"></i>
+                                    Clientes
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Continue with the rest of your menu items... -->
+                    <% } %>
+                    <li class="sidebar-item">
+                        <a href="/logout" class="sidebar-link">
+                            <i class="bi bi-box-arrow-left pe-2"></i>
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- Main Component -->
+        <div class="main">
+            <nav class="navbar navbar-expand px-3 border-bottom">
+                <!-- Button for sidebar toggle -->
+                <button class="btn" type="button" data-bs-theme="dark">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+            <main class="content px-3 py-2">
+                <div class="container-fluid">
+
+                </div>
+            </main>
+        </div>
+    </div>

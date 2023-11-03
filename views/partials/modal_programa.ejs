@@ -1,0 +1,43 @@
+<!-- Modal para agregar un programa de radio -->
+<div class="modal fade" id="addProgramModal" tabindex="-1" aria-labelledby="addProgramModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProgramModalLabel">Agregar Programa de Radio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/programas/add" method="post" id="addProgramForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombrePrograma" class="form-label">Nombre del Programa</label>
+                        <input type="text" class="form-control" id="nombrePrograma" name="nombre_programa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="medio_id" class="form-label">Medio Asociado</label>
+                        <select class="form-control" id="medio_id" name="medio_id" required>
+                            <% medios.forEach(medio => { %>
+                                <option value="<%= medio.id %>"><%= medio.nombre %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tarifa" class="form-label">Tarifa</label>
+                        <input type="number" class="form-control" id="tarifa" name="tarifa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="audiencia" class="form-label">Audiencia</label>
+                        <input type="text" class="form-control" id="audiencia" name="audiencia" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Agregar Programa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

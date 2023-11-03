@@ -1,0 +1,45 @@
+<%- include('partials/header', { title: 'Noticias Online', user: user }) %>
+
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Noticias Online</h1>
+    <a href="/noticiasonline/add" class="btn btn-success mb-3">
+    Agregar Noticia
+    </a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Medio</th>
+                <th>Título</th>
+                <th>Texto</th>
+                <th>Link</th>
+                <th>Fecha de Medio</th>
+                <th>Fecha de Subida</th>
+                <th>Cantidad de Caracteres</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% noticiasOnline.forEach(noticia => { %>
+            <tr>
+                <td><%= noticia.id %></td>
+                <td><%= noticia.nombreMedio %></td>
+                <td><%= noticia.titulo %></td>
+                <td><%= noticia.texto %></td>
+                <td><a href="<%= noticia.link %>" target="_blank"><%= noticia.link %></a></td>
+                <td><%= moment.utc(noticia.fecha_medio).locale('es').format('YYYY-MM-DD') %></td>
+                <td><%= moment.utc(noticia.fecha_subida).locale('es').format('YYYY-MM-DD HH:mm:ss') %></td>
+                <td><%= noticia.cantidad_caracteres %></td>
+                <td>
+                    <a href="#" class="btn btn-warning btn-sm" onclick="openEditModal('<%= noticia.id %>', '<%= noticia.Medio %>', '<%= noticia.titulo %>', '<%= noticia.texto %>', '<%= noticia.link %>', '<%= noticia.fecha_medio %>', '<%= noticia.cantidad_caracteres %>')">Editar</a>
+                    <form action="/noticiasonline/delete/<%= noticia.id %>" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta noticia?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<%- include('partials/footer') %>

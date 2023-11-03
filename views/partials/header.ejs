@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet"/>
+    <script src="scripts.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="banner"></div>
+        <div class="row">
+            <div id="sidebar" class="col-12 col-lg-2">
+                <img src="<%= user.Logos %>" alt="Logo del usuario" class="user-logo">
+                <div class="list-group">
+                    <a class="btn btn-sidebar bi bi-house" href="/"> Inicio</a>
+                    <a href="/radio" class="btn btn-sidebar bi bi-music-player"> Radio</a>
+                    <a href="/radio" class="btn btn-sidebar bi bi-tv"> Television</a>
+                    <a href="/radio" class="btn btn-sidebar bi bi-link-45deg"> Online</a>
+                    <a href="/radio" class="btn btn-sidebar bi bi-newspaper"> Prensa</a>
+                    <% if (user.role_id === 2 || user.role_id === 3) { %>
+                    <a href="/alertas" class="btn btn-sidebar bi bi-bell"> Ver Alertas</a>
+                    <a href="/view-videos" class="btn btn-sidebar bi bi-film"> Ver Grabaciones</a>
+                    <a href="/view-radio" class="btn btn-sidebar bi bi-film"> Ver Radio</a>
+                    <a href="/FragmentosNoticias" class="btn btn-sidebar bi bi-scissors"> Fragmentos</a>
+                    <% } %>
+                    <% if (user.role_id === 3) { %>
+                    <a href="#" class="btn btn-sidebar bi bi-gear" id="configDropdown"> Configuración</a>
+                    <div id="configOptions" style="display:none;">
+                            <a href="/lista-usuarios" class="btn btn-sidebar bi bi-people-fill"> Usuarios</a>
+                            <a href="/clientes" class="btn btn-sidebar bi bi-person-workspace"> Clientes</a>
+                    </div>
+                    <a href="#" class="btn btn-sidebar bi bi-server" id="onlineDropdown"> Configuración online</a>
+                    <div id="onlineOptions" style="display:none;">
+                            <a href="/mediosonline" class="btn btn-sidebar bi bi-person-lines-fill"> Crear medios</a>
+                            <a href="/noticiasonline" class="btn btn-sidebar bi bi-person-lines-fill"> Agregar noticia</a>
+                    </div>
+                    <a href="#" class="btn btn-sidebar bi bi-music-player" id="radioDropdown"> Configuración Radio</a>
+                    <div id="radioOptions" style="display:none;">
+                            <a href="/programas" class="btn btn-sidebar bi bi-person-lines-fill"> Programas</a>
+                    </div>
+                    <% } %>
+                    <a class="btn btn-sidebar bi bi-box-arrow-left" href="/logout"> Cerrar sesión</a>
+                </div>
+            </div> <!-- Fin de la barra lateral -->

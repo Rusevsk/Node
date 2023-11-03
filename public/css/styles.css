@@ -1,0 +1,221 @@
+/* Tu código CSS aquí */
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    margin-top: 0;
+}
+
+body.login-page {
+    background-image: url("/images/background.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.noticia {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.noticia h2 {
+    margin: 0 0 10px 0;
+}
+
+.noticia p {
+    margin: 0 0 10px 0;
+}
+
+.highlight {
+    color: red;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.sidebar.hidden {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.sidebar {
+    transition: all 0.5s ease;
+    width: 250px;
+    opacity: 1;
+    background-color: #f0f0f0;
+    border-right: 1px solid #cccccc;
+    box-shadow: 5px 0px 10px rgba(0,0,0,0.15);
+    height: 100%;
+    overflow: auto;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+
+}
+
+.btn-sidebar {
+    display: block;
+    text-align: left;
+    width: 100%;
+    color: #333;
+    background-color: #337ab7;
+    border-radius: 0;
+    border: none;
+    margin-bottom: 10px;
+    transition: all 0.5s ease;
+}
+
+.btn-sidebar:hover {
+    background-color: #01bb8a !important;
+    color: white !important;
+    text-decoration: none;
+}
+
+.btn-sidebar:active {
+    background-color: #204d74;
+    color: white;
+}
+
+#toggle-sidebar {
+    transition: background-color 0.5s ease;
+    position: absolute;
+    top: 160px; /* Ajusta este valor según tus necesidades */
+    left: 20px;
+    z-index: 100;
+}
+
+#toggle-sidebar:active {
+    background-color: #01bb8a;
+}
+
+#toggle-sidebar:focus {
+    background-color: #01bb8a;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 20px;
+    }
+    .form-add-words {
+        margin-top: 20px; /* Espacio adicional en pantallas pequeñas */
+    }
+}
+
+.login-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.login-card {
+    background-color: #2ABB8E;
+}
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: white;
+}
+.main-content {
+  height: 100vh; /* Hacer que el contenido principal tenga la altura de la pantalla */
+  overflow-y: hidden; /* Permitir el desplazamiento si el contenido es más largo que la vista del usuario */
+  border-left: 1px solid #cccccc; /* Ajusta el color según sea necesario */
+  box-shadow: -5px 0px 10px rgba(0,0,0,0.15);
+  padding-bottom: 60px; /* Ajusta este valor según la altura de tu barra de tareas */
+}
+.sidebar {
+  position: -webkit-sticky; /* Para compatibilidad con Safari */
+  position: sticky;
+  top: 0;
+  overflow-y: auto; /* Esto permite el desplazamiento si el contenido es más largo que la vista del usuario */
+}
+
+.container-fluid {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.banner {
+    margin-top: 0;
+    background-image: url('/images/unnamed.png');
+    background-repeat: no-repeat;
+    background-size: cover; /* Esto hará que la imagen cubra todo el div */
+    background-position: center;
+    height: 80px;
+}
+
+.list-group .btn-sidebar {
+  margin-bottom: 10px;
+}
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+}
+
+.scrollable-content {
+    max-height: 790px; /* Ajusta esto según la altura que desees */
+    overflow-y: auto;
+    padding-bottom: 100px;
+}
+
+body, html {
+  height: 100%; /* Esto es necesario para que la altura de 100vh funcione correctamente */
+}
+#noticias-container {
+    height: calc(100vh - 60px); /* Ajusta 60px a la altura de tu navbar */
+    overflow-y: auto;
+}
+.user-logo {
+    max-width: 80%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+
+}
+#alertasContainer {
+    max-height: calc(100vh - 250px); /* Ajusta este valor según sea necesario */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    margin-bottom: 50px; /* Añade un margen inferior para separar las alertas de la paginación */
+}
+
+.pagination-container {
+    position: sticky; /* Posición pegajosa */
+    bottom: 0; /* Alinea la paginación en la parte inferior */
+    background-color: white; /* Color de fondo para evitar la superposición */
+    z-index: 3; /* Ajusta según sea necesario para asegurarte de que esté por encima de otros elementos */
+    padding: 1px; /* Añade un poco de padding alrededor de la paginación */
+    margin-bottom: 40px; /* Ajusta este valor según la altura de tu barra de tareas */
+}

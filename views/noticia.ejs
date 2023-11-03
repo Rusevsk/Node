@@ -1,0 +1,73 @@
+<%- include('partials/fragmentModal') %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datos de la Base de Datos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/StyleaudioControl.css">
+
+
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center"><%= noticia.titulo %></h2>
+                <audio id="audio-player" controls class="w-100 my-4">
+                    <source src="<%= noticia.audio_url %>" type="audio/mpeg">
+                    Tu navegador no soporta la reproducción de audio.
+                </audio>
+                <div class="d-flex justify-content-center mb-4">
+                    <button id="back-10-sec" class="btn btn-outline-dark mx-2 btn-lg">
+                        <i class="fas fa-backward"></i> 10s
+                    </button>
+                    <button id="back-5-sec" class="btn btn-outline-info mx-2 btn-lg">
+                        <i class="fas fa-step-backward"></i> 5s
+                    </button>
+                    <button id="forward-5-sec" class="btn btn-outline-info mx-2 btn-lg">
+                        <i class="fas fa-step-forward"></i> 5s
+                    </button>
+                    <button id="forward-10-sec" class="btn btn-outline-dark mx-2 btn-lg">
+                        <i class="fas fa-forward"></i> 10s
+                    </button>
+            </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="startHour" class="form-label">Inicio:</label>
+                            <div class="input-group">
+<!--                                 <input type="number" id="startHour" name="startHour" class="form-control" placeholder="hh" min="0" max="23"> -->
+                                <input type="number" id="startMinute" name="startMinute" class="form-control" placeholder="mm" min="0" max="59">
+                                <input type="number" id="startSecond" name="startSecond" class="form-control" placeholder="ss" min="0" max="59">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="endHour" class="form-label">Final:</label>
+                            <div class="input-group">
+<!--                                 <input type="number" id="endHour" name="endHour" class="form-control" placeholder="hh" min="0" max="23"> -->
+                                <input type="number" id="endMinute" name="endMinute" class="form-control" placeholder="mm" min="0" max="59">
+                                <input type="number" id="endSecond" name="endSecond" class="form-control" placeholder="ss" min="0" max="59">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="cutAudioButton" class="btn btn-primary mb-4" data-audio-url="<%= noticia.audio_url %>">Cortar audio</button>
+                <h3>Id noticia: <%= noticia.id %></h3>
+                <p><%= noticia.fecha_subida %></p>
+                <p><%= noticia.duracion %></p>
+                <p><%= noticia.fecha_medio %></p>
+                <p><%= noticia.franja_id %></p>
+                <p class="text-justify"><%- palabrasClaves.reduce((texto, palabra) => texto.replace(new RegExp(palabra.toLowerCase(), 'gi'), '<span class="highlight">$&</span>'), noticia.texto.toLowerCase()) %></p>
+                <a href="/" class="btn btn-secondary d-block mx-auto">Volver a la lista de noticias</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/audioControl.js"></script>
+</body>
+</html>

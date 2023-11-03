@@ -1,0 +1,44 @@
+<%- include('partials/header', { title: 'Programas', user: user }) %>
+<%- include('partials/edit_programa_modal') %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Programas</h1>
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProgramModal">
+        Agregar Programa
+    </button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Medio Asociado</th>
+                <th>Tarifa</th>
+                <th>Audiencia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% programas.forEach(programa => { %>
+            <tr>
+                <td><%= programa.id %></td>
+                <td><%= programa.nombre %></td>
+                <td><%= programa.descripcion %></td>
+                <td><%= programa.medio_nombre %></td>
+                <td><%= programa.tarifa %></td> <!-- Asumiendo que hemos unido las tablas y traído el valor de la tarifa -->
+                <td><%= programa.audiencia %></td> <!-- Asumiendo que hemos unido las tablas y traído el valor de la audiencia -->
+                <td>
+                    <a href="#" class="btn btn-warning btn-sm" onclick="openEditModal('<%= programa.id %>', '<%= programa.nombre %>', '<%= programa.descripcion %>', '<%= programa.medio_id %>', '<%= programa.tarifa %>', '<%= programa.audiencia %>')">Editar</a>
+                    <form action="/programas/delete/<%= programa.id %>" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este programa?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Aquí debes ajustar el modal 'modal_programa' para incluir campos para tarifa y audiencia -->
+<%- include('partials/modal_programa') %>
+<%- include('partials/footer') %>

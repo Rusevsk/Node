@@ -1,0 +1,12 @@
+<%- include('partials/header', { title: 'Agregar Cliente', user: user }) %>
+<div class="col-12 col-lg-10 main-content">
+    <h1>Agregar Cliente</h1>
+    <form action="/clientes/agregar" method="post">
+        <div class="form-group">
+            <label for="nombre">Nombre del Cliente:</label>
+            <input type="text" class="form-control" name="nombre" id="nombre" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+</div>
+<%- include('partials/footer') %>

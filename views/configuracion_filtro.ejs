@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: 'Configuración del Filtro', user: user }) %>
+<div class="col-12 col-lg-10 main-content">
+    <h1>Configuración del Filtro: <%= filtro.nombre %></h1>
+    <p><%= filtro.descripcion %></p>
+    <div id="palabrasClavesContainer" style="max-height: 400px; overflow-y: scroll; padding: 15px; border: 1px solid #ccc;">
+        <ul class="list-group mb-4">
+            <% palabrasClaves.forEach(palabraClave => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><strong><%= palabraClave.palabra %></strong></span>
+                    <span class="text-muted">Palabra Cercana: <%= palabraClave.palabra_cercana %></span>
+                    <a href="/filtros/configuracion/<%= filtro.id %>/eliminar-palabra/<%= palabraClave.id %>" class="btn btn-danger btn-sm">Eliminar</a>
+                </li>
+            <% }); %>
+        </ul>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWordModal">
+            Agregar Palabra
+        </button>
+    </div>
+</div>
+<%- include('partials/add_word_modal', { filtroId: filtro.id }) %>
+<%- include('partials/footer') %>

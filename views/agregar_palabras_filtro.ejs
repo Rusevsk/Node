@@ -1,0 +1,17 @@
+<%- include('partials/header', { title: 'Agregar Palabras a Filtro', user: user }) %>
+<div class="col-12 col-lg-10 main-content">
+    <h1>Agregar Palabras a Filtro</h1>
+    <a href="/clientes/configuracion/<%= clienteId %>" class="btn btn-secondary mb-3">Regresar a Configuración</a>
+    <form action="/clientes/configuracion/<%= clienteId %>/filtro/<%= filtroId %>/agregar-palabra" method="post">
+        <div class="form-group">
+            <label for="palabra">Palabra Clave:</label>
+            <select class="form-control" name="palabra" id="palabra" required>
+                <% palabrasClaves.forEach(palabraClave => { %>
+                    <option value="<%= palabraClave.id %>"><%= palabraClave.palabra %> (Palabra Cercana: <%= palabraClave.palabra_cercana %>)</option>
+                <% }); %>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Palabra al Filtro</button>
+    </form>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,40 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+#contentList {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.directory, .video {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e5e5e5;
+    transition: background-color 0.3s;
+}
+
+.directory:hover, .video:hover {
+    background-color: #e9e9e9;
+}
+
+.directory:before {
+    content: '\1F4C1'; /* Icono de carpeta */
+    margin-right: 10px;
+}
+
+.audio:before {
+    content: '\1F3B5'; /* Icono de nota musical */
+    margin-right: 10px;
+}
+
+.goBack {
+    display: block;
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: #007BFF;
+    text-decoration: none;
+}
+.goBack:hover {
+    text-decoration: underline;
+}

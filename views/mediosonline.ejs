@@ -1,0 +1,42 @@
+<%- include('partials/header', { title: 'Medios Online', user: user }) %>
+<%- include('partials/edit_medio_modal') %>
+
+<div class="col-12 col-lg-10 main-content">
+    <h1>Medios Online</h1>
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addMediaModal">
+        Agregar Medio
+    </button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Link</th>
+                <th>Fecha de Creación</th>
+                <th>Audiencias</th>
+                <th>Tarifas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% mediosOnline.forEach(medio => { %>
+            <tr>
+                <td><%= medio.id %></td>
+                <td><%= medio.nombre %></td>
+                <td><a href="<%= medio.link %>" target="_blank"><%= medio.link %></a></td>
+                <td><%= moment.utc(medio.fecha_creacion).locale('es').format('dddd - YYYY-MM-DD') %></td>
+                <td><%= medio.audiencias %></td>
+                <td><%= medio.tarifas %></td>
+                <td>
+                    <a href="#" class="btn btn-warning btn-sm" onclick="openEditModal('<%= medio.id %>', '<%= medio.nombre %>', '<%= medio.link %>', '<%= medio.audiencias %>', '<%= medio.tarifas %>')">Editar</a>
+                    <form action="/mediosonline/delete/<%= medio.id %>" method="post" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este medio?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<%- include('partials/modal_medioonline') %>
+<%- include('partials/footer') %>

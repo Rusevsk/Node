@@ -1,0 +1,40 @@
+<!-- Modal para editar un medio -->
+<div class="modal fade" id="editMediaModal" tabindex="-1" aria-labelledby="editMediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMediaModalLabel">Editar Medio Online</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/mediosonline/edit" method="post" id="editMediaForm">
+                <input type="hidden" id="editMediaId" name="id"> <!-- Campo oculto para almacenar el ID -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="editNombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLink" class="form-label">Link</label>
+                        <input type="url" class="form-control" id="editLink" name="link" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editFechaCreacion" class="form-label">Fecha de Creación</label>
+                        <input type="date" class="form-control" id="editFechaCreacion" name="fecha_creacion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editAudiencias" class="form-label">Audiencias</label>
+                        <input type="text" class="form-control" id="editAudiencias" name="audiencias">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTarifas" class="form-label">Tarifas</label>
+                        <input type="text" class="form-control" id="editTarifas" name="tarifas">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="modal fade" id="addWordModal" tabindex="-1" aria-labelledby="addWordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWordModalLabel">Agregar Palabra Clave</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/palabras-claves/<%= clienteId %>" method="post">
+                    <div class="form-group">
+                        <label for="palabra">Palabra Clave:</label>
+                        <input type="text" class="form-control" name="palabra" id="palabra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="palabra_cercana">Palabra Cercana:</label>
+                        <input type="text" class="form-control" name="palabra_cercana" id="palabra_cercana">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
