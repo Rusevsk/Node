@@ -1553,7 +1553,7 @@ async function listContent(baseDirectory, directory) {
         let stat = await fsPromises.stat(fullPath);
 
         if (stat.isDirectory()) {
-            contentList.push({ type: 'directory', name: file, path: fullPath.replace(baseDirectory, '/') });
+            contentList.push({ type: 'directory', name: file, path: fullPath.substring(baseDirectory.length).startsWith('/') ? fullPath.substring(baseDirectory.length + 1) : fullPath.substring(baseDirectory.length) });
         } else if (path.extname(file) === '.mp4' || path.extname(file) === '.mp3') {
             const relativePath = path.relative(baseDirectory, fullPath);
             console.log("Generated relative path:", relativePath);
