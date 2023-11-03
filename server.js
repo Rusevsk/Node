@@ -1768,28 +1768,28 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    const filePath = req.params[0];
+    let filePath = req.params[0];
 
-    // Log para ver la ruta del archivo solicitada
     console.log("Received file path:", filePath);
 
-    // Asegúrate de que la ruta del archivo no comience con una barra, lo cual puede causar problemas con path.join
-    const normalizedFilePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+    // Remover la barra inicial si existe en filePath
+    if (filePath.startsWith('/')) {
+        filePath = filePath.substring(1);
+    }
 
-    // Construye la ruta completa del archivo
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', normalizedFilePath);
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
     
-    // Registros adicionales para depuración
-    console.log("Normalized file path:", normalizedFilePath);
     console.log("Constructed audio path:", audioPath);
 
-    // Verificar si el archivo existe
+    // Comprobar si el archivo existe antes de intentar servirlo
     fs.stat(audioPath, (err, stat) => {
         if (err) {
             if (err.code === 'ENOENT') {
+                // El archivo no existe
                 console.error("File does not exist:", audioPath);
                 return res.status(404).send('Audio file not found');
             }
+            // Otro error al intentar obtener información del archivo
             console.error("Error serving audio file:", err);
             return res.status(500).send('Internal Server Error');
         }
@@ -1798,21 +1798,22 @@ app.get('/radio/*', (req, res) => {
         const range = req.headers.range;
 
         if (range) {
+            // Procesar solicitudes con rango (para streaming parcial)
             const parts = range.replace(/bytes=/, "").split("-");
             const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-            const chunksize = (end - start) + 1;
-            const file = fs.createReadStream(audioPath, { start, end });
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
+            const chunkSize = (end-start)+1;
+            const file = fs.createReadStream(audioPath, {start, end});
             const head = {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
-                'Content-Length': chunksize,
+                'Content-Length': chunkSize,
                 'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
             };
-
             res.writeHead(206, head);
             file.pipe(res);
         } else {
+            // Procesar solicitudes sin rango (transmisión completa del archivo)
             const head = {
                 'Content-Length': fileSize,
                 'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
