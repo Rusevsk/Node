@@ -1767,10 +1767,14 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/radio/*', async (req, res) => {
+app.get('/radio/*', (req, res) => {
+    // Extrae la ruta de los parámetros de la solicitud
     const filePath = req.params[0];
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
-    console.log("Trying to serve audio from:", audioPath);
+
+    // Asegúrate de que filePath no tenga una barra inicial para que path.join construya la ruta correctamente
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath.startsWith('/') ? filePath.substring(1) : filePath);
+    console.log("Constructed audio path:", audioPath);
+
 
     // Verificar si el archivo existe antes de intentar servirlo
     if (!fs.existsSync(audioPath)) {
