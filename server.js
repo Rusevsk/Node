@@ -1541,35 +1541,27 @@ app.post('/cut-audio', function(req, res) {
 
 //--------------------------------------------------------Reproductor video
 
-async function listContent(baseDirectory, directory = '') {
+async function listContent(baseDirectory, directory) {
     const fullPathDirectory = path.join(baseDirectory, directory);
-    console.log('Full path to directory:', fullPathDirectory);
-    try {
-        let files = await fsPromises.readdir(fullPathDirectory);
-        console.log('Files in directory:', files);
-        let contentList = [];
+    console.log('Full path:', fullPathDirectory);
+    let files = await fsPromises.readdir(fullPathDirectory);
+    console.log('Files:', files);
+    let contentList = [];
 
-        for (let file of files) {
-            let fullPath = path.join(fullPathDirectory, file);
-            let stat = await fsPromises.stat(fullPath);
-            let relativePath = path.relative(baseDirectory, fullPath).replace(/\\/g, '/'); // Ensure we use web-friendly path separators
+    for (let file of files) {
+        let fullPath = path.join(fullPathDirectory, file);
+        let stat = await fsPromises.stat(fullPath);
 
-            if (stat.isDirectory()) {
-                // Append a '/' to make it an absolute path in the context of the server
-                contentList.push({ type: 'directory', name: file, path: '/' + relativePath });
-            } else if (stat.isFile() && ['.mp3', '.mp4'].includes(path.extname(file).toLowerCase())) {
-                // Append a '/' to make it an absolute path in the context of the server
-                contentList.push({ type: 'file', name: file, path: '/' + relativePath });
-            }
+        if (stat.isDirectory()) {
+            contentList.push({ type: 'directory', name: file, path: `/${path.relative(baseDirectory, fullPath)}` });
+        } else if (['.mp4', '.mp3'].includes(path.extname(file))) {
+            contentList.push({ type: 'file', name: file, path: `/${path.relative(baseDirectory, fullPath)}` });
         }
-
-        console.log('Content list:', contentList);
-        return contentList;
-    } catch (error) {
-        console.error('Error accessing path:', fullPathDirectory, error);
-        throw error; // Re-throw the error to be handled by the caller
     }
+
+    return contentList;
 }
+
 app.get('/list-years', async (req, res) => {
     console.log('Received request for list-years endpoint');
     try {
@@ -1767,61 +1759,42 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/radio/*', (req, res) => {
-    let filePath = req.params[0];
+app.get('/radio/*', async (req, res) => {
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', req.params[0].startsWith('/') ? req.params[0].substring(1) : req.params[0]);
+    console.log("Trying to serve audio from:", audioPath);
 
-    console.log("Received file path:", filePath);
-
-    // Remover la barra inicial si existe en filePath
-    if (filePath.startsWith('/')) {
-        filePath = filePath.substring(1);
-    }
-
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
-    
-    console.log("Constructed audio path:", audioPath);
-
-    // Comprobar si el archivo existe antes de intentar servirlo
-    fs.stat(audioPath, (err, stat) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                // El archivo no existe
-                console.error("File does not exist:", audioPath);
-                return res.status(404).send('Audio file not found');
-            }
-            // Otro error al intentar obtener información del archivo
-            console.error("Error serving audio file:", err);
-            return res.status(500).send('Internal Server Error');
-        }
-
+    try {
+        const stat = await fsPromises.stat(audioPath);
         const fileSize = stat.size;
         const range = req.headers.range;
 
         if (range) {
-            // Procesar solicitudes con rango (para streaming parcial)
             const parts = range.replace(/bytes=/, "").split("-");
             const start = parseInt(parts[0], 10);
-            const end = parts[1] ? parseInt(parts[1], 10) : fileSize-1;
-            const chunkSize = (end-start)+1;
-            const file = fs.createReadStream(audioPath, {start, end});
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+            const chunksize = (end - start) + 1;
+            const file = fs.createReadStream(audioPath, { start, end });
             const head = {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
-                'Content-Length': chunkSize,
-                'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
+                'Content-Length': chunksize,
+                'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
             };
+
             res.writeHead(206, head);
             file.pipe(res);
         } else {
-            // Procesar solicitudes sin rango (transmisión completa del archivo)
             const head = {
                 'Content-Length': fileSize,
-                'Content-Type': 'audio/mpeg', // Asumiendo que los archivos son MP3
+                'Content-Type': 'audio/mpeg'  // Asumiendo que tus archivos son MP3
             };
             res.writeHead(200, head);
             fs.createReadStream(audioPath).pipe(res);
         }
-    });
+    } catch (error) {
+        console.error("Error serving audio file:", error);
+        res.status(404).send('Audio file not found');
+    }
 });
 
 
