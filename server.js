@@ -1798,25 +1798,17 @@ app.get('/radio/*', (req, res) => {
 //------------------------------------- audio
 
 app.get('/list-audio', async (req, res) => {
+    // Obtener la ruta relativa desde la query, por ejemplo "Antena2"
     const directory = req.query.path || '';
+    
+    // Construir la ruta completa en el servidor
     const fullPath = path.join('/mnt/CapitalPress/GrabacionesRadio', directory);
 
-    console.log("Accessing directory query param:", directory);
+    console.log("Accessing directory:", directory);
     console.log("Full path to access:", fullPath);
 
     try {
-        let content = await listContent(fullPath);
-        console.log("Content listed:", content);
-        res.json(content);
-    } catch (error) {
-        console.error("Error listing content for path", fullPath, ":", error);
-        res.status(500).send('Error listing content');
-    }
-});
-
-
-    try {
-        let content = await listContent('/mnt/CapitalPress/GrabacionesRadio', directory);
+        let content = await listContent(fullPath); // Asegúrate de que listContent maneje correctamente la ruta
         console.log("Content:", content);
         res.json(content);
     } catch (error) {
