@@ -1543,33 +1543,33 @@ app.post('/cut-audio', function(req, res) {
 
 async function listContent(baseDirectory, directory = '') {
     const fullPathDirectory = path.join(baseDirectory, directory);
-    console.log('Full path:', fullPathDirectory);
+    console.log('Full path to directory:', fullPathDirectory);
     try {
         let files = await fsPromises.readdir(fullPathDirectory);
-        console.log('Files:', files);
+        console.log('Files in directory:', files);
         let contentList = [];
 
         for (let file of files) {
             let fullPath = path.join(fullPathDirectory, file);
             let stat = await fsPromises.stat(fullPath);
-            let relativePath = path.relative(baseDirectory, fullPath);
+            let relativePath = path.relative(baseDirectory, fullPath).replace(/\\/g, '/'); // Ensure we use web-friendly path separators
 
             if (stat.isDirectory()) {
-                // Añade '/' al principio para que sea una ruta absoluta en el contexto de tu servidor
-                contentList.push({ type: 'directory', name: file, path: '/' + relativePath.replace(/\\/g, '/') });
+                // Append a '/' to make it an absolute path in the context of the server
+                contentList.push({ type: 'directory', name: file, path: '/' + relativePath });
             } else if (stat.isFile() && ['.mp3', '.mp4'].includes(path.extname(file).toLowerCase())) {
-                // Añade '/' al principio y asegúrate de usar barras '/' para rutas web, pero no dupliques el nombre del archivo
-                contentList.push({ type: 'file', name: file, path: '/' + relativePath.replace(/\\/g, '/') });
+                // Append a '/' to make it an absolute path in the context of the server
+                contentList.push({ type: 'file', name: file, path: '/' + relativePath });
             }
         }
 
+        console.log('Content list:', contentList);
         return contentList;
     } catch (error) {
         console.error('Error accessing path:', fullPathDirectory, error);
         throw error; // Re-throw the error to be handled by the caller
     }
 }
-
 app.get('/list-years', async (req, res) => {
     console.log('Received request for list-years endpoint');
     try {
