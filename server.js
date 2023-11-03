@@ -1542,27 +1542,29 @@ app.post('/cut-audio', function(req, res) {
 //--------------------------------------------------------Reproductor video
 
 async function listContent(baseDirectory, directory = '') {
-    const fullPathDirectory = path.resolve(baseDirectory, directory);
+    const fullPathDirectory = path.join(baseDirectory, directory);
     console.log('Full path:', fullPathDirectory);
-    let files = await fsPromises.readdir(fullPathDirectory);
-    console.log('Files:', files);
-    let contentList = [];
+    try {
+        let files = await fsPromises.readdir(fullPathDirectory);
+        console.log('Files:', files);
+        let contentList = [];
 
-    for (let file of files) {
-        let fullPath = path.join(fullPathDirectory, file);
-        let stat = await fsPromises.stat(fullPath);
+        for (let file of files) {
+            let fullPath = path.join(fullPathDirectory, file);
+            let stat = await fsPromises.stat(fullPath);
 
-        if (stat.isDirectory()) {
-            contentList.push({ type: 'directory', name: file, path: fullPath.substring(baseDirectory.length).startsWith('/') ? fullPath.substring(baseDirectory.length + 1) : fullPath.substring(baseDirectory.length) });
-        } else if (path.extname(file) === '.mp4' || path.extname(file) === '.mp3') {
-            const relativePath = path.relative(baseDirectory, fullPath);
-            console.log("Generated relative path:", relativePath);
-            contentList.push({ type: 'file', name: file, path: relativePath });
-
+            if (stat.isDirectory()) {
+                contentList.push({ type: 'directory', name: file, path: '/' + path.relative(baseDirectory, fullPath) });
+            } else if (['.mp4', '.mp3'].includes(path.extname(file))) {
+                contentList.push({ type: 'file', name: file, path: '/' + path.relative(baseDirectory, fullPath) });
+            }
         }
-    }
 
-    return contentList;
+        return contentList;
+    } catch (error) {
+        console.error('Error accessing path:', fullPathDirectory, error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
 }
 
 app.get('/list-years', async (req, res) => {
