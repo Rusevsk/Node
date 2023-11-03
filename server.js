@@ -29,8 +29,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/views', express.static(path.join(__dirname, 'views')));
 app.use(express.static('public')); // Aquí es donde debes poner esta línea
 app.use('/public', express.static('public'));
-app.use('/audio', express.static('\\\\172.23.139.32\\CapitalPress\\Transcripciones texto'));
-app.use('/fragmentos', express.static('\\\\172.23.139.32\\CapitalPress\\Fragmentos'));
+app.use('/audio', express.static('/mnt/CapitalPress/Transcripciones texto'));
+app.use('/fragmentos', express.static('/mnt/CapitalPress/Fragmentos'));
 app.use(cors()); // Habilitar CORS para todas las rutas
 // Sirve los archivos estáticos de la carpeta 'build'
 app.use(express.static(path.join(__dirname, 'build')));
@@ -1763,7 +1763,7 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    const audioPath = path.join('//172.23.139.32/CapitalPress/GrabacionesRadio', req.params[0]);
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', req.params[0]);
     console.log("Trying to serve audio from:", audioPath);
 
     const stat = fs.statSync(audioPath);
@@ -1803,7 +1803,7 @@ app.get('/list-audio', async (req, res) => {
     console.log("Accessing directory:", directory);
 
     try {
-        let content = await listContent('//172.23.139.32/CapitalPress/GrabacionesRadio', directory);
+        let content = await listContent('/mnt/CapitalPress/GrabacionesRadio', directory);
         console.log("Content:", content);
         res.json(content);
     } catch (error) {
