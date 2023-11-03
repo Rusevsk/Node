@@ -2,48 +2,56 @@ let directoryHistory = [];
 
 async function loadContent(directoryPath = '') {
     try {
-        if(directoryPath && !directoryHistory.includes(directoryPath)) {
-            directoryHistory.push(directoryPath);
-        }
-
-        const response = await fetch(`/list-audio?path=${encodeURIComponent(directoryPath)}`);
+        const encodedPath = encodeURIComponent(directoryPath);
+        const response = await fetch(`/list-audio?path=${encodedPath}`);
         const content = await response.json();
 
         const contentListElement = document.getElementById('contentList');
         contentListElement.innerHTML = ''; // Limpiar el contenido existente
 
-        if (directoryHistory.length > 0) {  // Cambio la condición aquí
+        // Añadir el enlace para volver atrás, si es necesario
+        if (directoryHistory.length > 1) {  // El primer elemento es '', así que necesitamos más de uno para volver atrás
             const goBackLink = document.createElement('a');
             goBackLink.innerText = 'Regresar al directorio anterior';
+            goBackLink.href = '#';
             goBackLink.classList.add('goBack');
-            goBackLink.onclick = () => {
-                directoryHistory.pop(); // Remueve el directorio actual
-                const previousDirectory = directoryHistory.length > 0 ? directoryHistory[directoryHistory.length - 1] : '';
-                loadContent(previousDirectory);
+            goBackLink.onclick = (e) => {
+                e.preventDefault();
+                directoryHistory.pop(); // Remueve el último directorio visitado
+                loadContent(directoryHistory[directoryHistory.length - 1]);
             };
             contentListElement.appendChild(goBackLink);
         }
 
-
+        // Mostrar los elementos del directorio actual
         content.forEach(item => {
             const listItem = document.createElement('div');
             listItem.innerText = item.name;
 
             if (item.type === 'directory') {
                 listItem.classList.add('directory');
-                listItem.onclick = () => loadContent(item.path);
+                listItem.onclick = () => {
+                    const newPath = directoryPath ? `${directoryPath}/${item.name}` : item.name;
+                    directoryHistory.push(newPath); // Añadir nuevo path al historial
+                    loadContent(newPath);
+                };
             } else if (item.type === 'file') {
-                listItem.classList.add('audio'); // O cambia esto a 'audio' si decides usar una clase diferente en el CSS.
+                listItem.classList.add('audio');
                 listItem.onclick = () => playAudio(item.path);
             }
 
-
             contentListElement.appendChild(listItem);
         });
+
+        // Actualizar el historial si no estaba incluido aún
+        if(directoryPath && !directoryHistory.includes(directoryPath)) {
+            directoryHistory.push(directoryPath);
+        }
     } catch (error) {
         console.error('Error loading content:', error);
     }
 }
+
 
 function cutAudio() {
     const startMinute = document.getElementById('startMinuteAudio').value;
