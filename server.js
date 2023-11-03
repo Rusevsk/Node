@@ -1552,11 +1552,14 @@ async function listContent(baseDirectory, directory = '') {
         for (let file of files) {
             let fullPath = path.join(fullPathDirectory, file);
             let stat = await fsPromises.stat(fullPath);
+            let relativePath = path.relative(baseDirectory, fullPath);
 
             if (stat.isDirectory()) {
-                contentList.push({ type: 'directory', name: file, path: '/' + path.relative(baseDirectory, fullPath) });
+                // Asegúrate de que la ruta relativa comience con '/' para que sea una ruta absoluta en el contexto de tu servidor
+                contentList.push({ type: 'directory', name: file, path: '/' + relativePath });
             } else if (['.mp4', '.mp3'].includes(path.extname(file))) {
-                contentList.push({ type: 'file', name: file, path: '/' + path.relative(baseDirectory, fullPath) });
+                // Asegúrate de que la ruta relativa comience con '/' para que sea una ruta absoluta en el contexto de tu servidor
+                contentList.push({ type: 'file', name: file, path: '/' + relativePath });
             }
         }
 
@@ -1566,6 +1569,7 @@ async function listContent(baseDirectory, directory = '') {
         throw error; // Re-throw the error to be handled by the caller
     }
 }
+
 
 app.get('/list-years', async (req, res) => {
     console.log('Received request for list-years endpoint');
