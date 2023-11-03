@@ -1769,11 +1769,11 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 });
 
 app.get('/radio/*', (req, res) => {
-    // Esto captura todos los segmentos de la ruta como un string
     const filePath = req.params[0];
-    // Construye la ruta completa desde la ruta proporcionada
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
+    console.log("Received file path:", filePath);  // Imprime el camino recibido para verificarlo
 
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
+    console.log("Constructed audio path:", audioPath);  // Verifica la ruta construida
     console.log("Trying to serve audio from:", audioPath);
     
     try {
