@@ -1766,6 +1766,7 @@ app.get('/radio/*', (req, res) => {
     const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', req.params[0]);
     console.log("Trying to serve audio from:", audioPath);
 
+
     const stat = fs.statSync(audioPath);
     const fileSize = stat.size;
     const range = req.headers.range;
@@ -1799,8 +1800,21 @@ app.get('/radio/*', (req, res) => {
 
 app.get('/list-audio', async (req, res) => {
     const directory = req.query.path || '';
+    const fullPath = path.join('/mnt/CapitalPress/GrabacionesRadio', directory);
 
-    console.log("Accessing directory:", directory);
+    console.log("Accessing directory query param:", directory);
+    console.log("Full path to access:", fullPath);
+
+    try {
+        let content = await listContent(fullPath);
+        console.log("Content listed:", content);
+        res.json(content);
+    } catch (error) {
+        console.error("Error listing content for path", fullPath, ":", error);
+        res.status(500).send('Error listing content');
+    }
+});
+
 
     try {
         let content = await listContent('/mnt/CapitalPress/GrabacionesRadio', directory);
