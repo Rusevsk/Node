@@ -1541,7 +1541,7 @@ app.post('/cut-audio', function(req, res) {
 
 //--------------------------------------------------------Reproductor video
 
-async function listContent(baseDirectory, directory) {
+async function listContent(baseDirectory, directory = '') {
     const fullPathDirectory = path.resolve(baseDirectory, directory);
     console.log('Full path:', fullPathDirectory);
     let files = await fsPromises.readdir(fullPathDirectory);
