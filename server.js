@@ -1769,18 +1769,27 @@ app.get('/view-videos', checkAuthenticated, async (req, res) => {
 
 app.get('/radio/*', (req, res) => {
     const filePath = req.params[0];
-    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', filePath);
+
+    // Log para ver la ruta del archivo solicitada
+    console.log("Received file path:", filePath);
+
+    // Asegúrate de que la ruta del archivo no comience con una barra, lo cual puede causar problemas con path.join
+    const normalizedFilePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+
+    // Construye la ruta completa del archivo
+    const audioPath = path.join('/mnt/CapitalPress/GrabacionesRadio', normalizedFilePath);
+    
+    // Registros adicionales para depuración
+    console.log("Normalized file path:", normalizedFilePath);
     console.log("Constructed audio path:", audioPath);
 
     // Verificar si el archivo existe
     fs.stat(audioPath, (err, stat) => {
         if (err) {
             if (err.code === 'ENOENT') {
-                // El archivo no existe
                 console.error("File does not exist:", audioPath);
                 return res.status(404).send('Audio file not found');
             }
-            // Error de servidor
             console.error("Error serving audio file:", err);
             return res.status(500).send('Internal Server Error');
         }
